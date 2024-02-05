@@ -1,11 +1,16 @@
 import React from "react";
 import Skill from "./Skill";
 
-export default function SkillList(props) {
+export default function SkillList({ skillList }) {
   return (
     <div className="skill-list">
-      {props.skillList.map((skill) => (
-        <Skill name={skill.name} emoji={skill.emoji} color={skill.color} />
+      {skillList.map((skill) => (
+        <Skill
+          id={skill.skill}
+          skill={skill.skill}
+          level={skill.level}
+          color={skill.color}
+        />
       ))}
     </div>
   );
