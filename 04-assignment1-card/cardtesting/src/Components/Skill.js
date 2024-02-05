@@ -6,8 +6,10 @@ function Skill(props) {
   };
   return (
     <div className="skill" style={style}>
-      {props.name}
-      {props.emoji}
+      {/* {props.name}
+      {props.emoji} */}
+      <span>{props.name}</span>
+      <span>{props.emoji}</span>
     </div>
   );
 }
