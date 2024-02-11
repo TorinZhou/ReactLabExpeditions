@@ -1,17 +1,22 @@
 import { useState } from "react";
 
-const initialItems = [
-  { id: 1, description: "Passports", quantity: 2, packed: false },
-  { id: 2, description: "Socks", quantity: 12, packed: false },
-  { id: 3, description: "Charger", quantity: 12, packed: false },
-  { id: 4, description: "Euro", quantity: 2000, packed: true },
-];
 export default function App() {
+  const [items, setItems] = useState([]);
+
+  const handleAddItems = (item) => {
+    setItems((items) => [...items, item]);
+    // I can't do items.slice().push(item), keep in mind
+  };
+  const handleDeleteItem = (id) => {
+    console.log(id);
+    setItems((items) => items.filter((item) => item.id !== id));
+  };
+
   return (
     <div className="app">
       <Logo></Logo>
-      <Form></Form>
-      <PackingList></PackingList>
+      <Form onAddItems={handleAddItems}></Form>
+      <PackingList items={items} onDeleteItem={handleDeleteItem}></PackingList>
       <Stats></Stats>
     </div>
   );
@@ -21,9 +26,10 @@ function Logo() {
   return <h1>🌴 Far Away 🎒</h1>;
 }
 
-function Form() {
+function Form({ onAddItems }) {
   const [description, setDescription] = useState("");
   const [quantity, setQuantity] = useState(1);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!description) return;
@@ -33,9 +39,10 @@ function Form() {
       description: description,
       packed: false,
     };
-    console.log(newItem);
+    onAddItems(newItem);
     setDescription("");
   };
+
   return (
     <form className="add-form" onSubmit={handleSubmit}>
       <h3>What do you neek for your 😊 trip</h3>
@@ -62,32 +69,26 @@ function Form() {
   );
 }
 
-function PackingList() {
+function PackingList({ items, onDeleteItem }) {
   return (
     <div className="list">
       <ul>
-        {initialItems.map((item) => (
-          <Item item={item} key={item.id}></Item>
+        {items.map((item) => (
+          <Item item={item} key={item.id} onDeleteItem={onDeleteItem}></Item>
         ))}
       </ul>
     </div>
   );
 }
 
-function Item({ item }) {
+function Item({ item, onDeleteItem }) {
   const [isPacked, setIsPacked] = useState(item.packed);
   return (
     <li>
       <span
         style={isPacked ? { textDecoration: "line-through" } : null}
       >{`${item.quantity} ${item.description}`}</span>
-      <button
-        onClick={() => {
-          setIsPacked((c) => !c);
-        }}
-      >
-        ❌
-      </button>
+      <button onClick={() => onDeleteItem(item.id)}>❌</button>
     </li>
   );
 }
