@@ -39,27 +39,56 @@ function App() {
   );
 }
 function Accordion({ data }) {
+  const [openIndex, setOpenIndex] = useState(null);
+  const handleSwitchOpenIndex = (index) => {
+    setOpenIndex(index);
+  };
   return (
     <div className="accordion">
       {data.map((faq, i) => (
-        <Item key={i} index={i + 1} title={faq.title} text={faq.text}></Item>
+        <Item
+          key={i}
+          index={i + 1}
+          title={faq.title}
+          openIndex={openIndex}
+          onOpen={handleSwitchOpenIndex}
+        >
+          {faq.text}
+        </Item>
       ))}
+      <Item
+        key={222}
+        index={23}
+        title={"Test1"}
+        openIndex={openIndex}
+        onOpen={handleSwitchOpenIndex}
+      >
+        <>
+          <h3>Test</h3>
+          <ul>
+            <li>{lorem.generateSentences(1)}</li>
+            <li>{lorem.generateSentences(1)}</li>
+            <li>{lorem.generateSentences(1)}</li>
+            <li>{lorem.generateSentences(1)}</li>
+          </ul>
+        </>
+      </Item>
     </div>
   );
 }
-function Item({ index, title, text }) {
-  const [isOpen, setIsOpen] = useState(false);
-  console.log("item component called");
-  const handleToogle = () => {
-    setIsOpen((c) => !c);
-  };
 
+function Item({ index, title, openIndex, onOpen, children }) {
+  const isOpen = index === openIndex;
+  const handleClick = () => {
+    // index === openIndex ? onOpen(null) : onOpen(index);
+    onOpen(isOpen ? null : index);
+  };
   return (
-    <div className={`item ${isOpen ? "open" : null}`} onClick={handleToogle}>
+    <div className={`item ${isOpen ? "open" : null}`} onClick={handleClick}>
       <p className="number">{index < 9 ? `0${index}` : index + 1}</p>
       <div className="title">{title}</div>
       {isOpen ? <div className="icon">+</div> : <div className="icon">-</div>}
-      {isOpen && <div className="content-box">{text}</div>}
+      {isOpen && <div className="content-box">{children}</div>}
     </div>
   );
 }

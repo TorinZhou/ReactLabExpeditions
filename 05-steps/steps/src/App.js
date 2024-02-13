@@ -41,9 +41,10 @@ function Step() {
             <div className={step >= 2 ? "active" : undefined}>2</div>
             <div className={`${step >= 3 ? "active" : undefined}`}>3</div>
           </div>
-          <p className="message">
+          <StepMessage step={step}>{messages[step - 1]}</StepMessage>
+          {/* <p className="message">
             Step {step}: {messages[step - 1]}
-          </p>
+          </p> */}
           <div className="buttons">
             <Button textColor="#fff" bgColor="#7950f2" onClick={handlePrevious}>
               <span>👈</span>Previous
@@ -66,6 +67,14 @@ function Button({ textColor, bgColor, onClick, children }) {
     >
       {children}
     </button>
+  );
+}
+function StepMessage({ step, children }) {
+  return (
+    <p className="message">
+      <h3>Step {step}:</h3>
+      {children}
+    </p>
   );
 }
 
