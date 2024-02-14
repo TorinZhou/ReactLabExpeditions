@@ -1,9 +1,10 @@
 function BillInput({ bill, onInputBill, children }) {
   return (
     <div>
-      <span>{children}</span>
+      <label>{children}</label>
       <input
         type="number"
+        placeholder="Bill value"
         value={bill}
         onChange={(e) => onInputBill(+e.target.value)}
       ></input>
