@@ -1,0 +1,39 @@
+/* Container for the entire app */
+.App {
+  display: flex;
+  height: 100vh; /* Full height of the viewport */
+}
+
+/* Container for the left side (bag selection) */
+.left-container {
+  flex: 1; /* Takes up 1 portion of the available space */
+  background-color: #f0f0f0; /* Light grey background for contrast */
+  padding: 20px; /* Spacing inside the container */
+  overflow-y: auto; /* Enables scroll if content overflows vertically */
+}
+.left-container button {
+  margin-top: auto; /* Pushes the button to the bottom of the leftPanel */
+  padding: 10px; /* Adds some padding inside the button */
+  width: 100%; /* Makes the button extend the full width of the leftPanel */
+}
+
+/* Container for the right side (bag details) */
+.right-container {
+  flex: 2; /* Takes up 2 portions of the available space, making it larger than the left container */
+  background-color: #ffffff; /* White background */
+  padding: 20px; /* Spacing inside the container */
+  overflow-y: auto; /* Enables scroll if content overflows vertically */
+}
+.bagList {
+  list-style: none; /* Removes default list styling */
+  padding: 0; /* Removes default padding */
+  margin: 0; /* Removes default margin */
+}
+.bagItem {
+  padding: 10px; /* Adds some padding for touch friendliness */
+  cursor: pointer; /* Changes the cursor to indicate the items are clickable */
+}
+.bagItem .active,
+.bagItem :hover {
+  background-color: #f0f0f0; /* Highlight for active or hovered item */
+}
