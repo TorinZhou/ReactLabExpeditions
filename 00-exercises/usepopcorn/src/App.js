@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const tempMovieData = [
   {
@@ -50,11 +50,53 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+const KEY = "e231f619";
+
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
   const [watched, setWatched] = useState(tempWatchedData);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState("");
   const [isOpen1, setIsOpen1] = useState(true);
   const [isOpen2, setIsOpen2] = useState(true);
+  const query = "ssvvv";
+
+  useEffect(
+    () => {
+      async function fetchMovies() {
+        setIsLoading(true);
+        try {
+          const res = await fetch(
+            `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&s=${query}`
+          );
+          if (!res.ok) {
+            throw new Error("Failed to fetch movies");
+          }
+          const data = await res.json();
+          if (data.Response === "False") {
+            throw new Error("Movie not found");
+          }
+          setMovies(data.Search);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setIsLoading(false);
+        }
+      }
+      fetchMovies();
+    },
+    // () =>
+    //   async function fetchMovies() {
+    //     setIsLoading(true);
+    //     const res = await fetch(
+    //       `http://www.omdbapi.com/?i=tt3896198&apikey=${KEY}&S=interstellar`
+    //     );
+    //     const data = await res.json();
+    //     setMovies(data.Search);
+    //     setIsLoading(false);
+    //   },
+    []
+  );
 
   return (
     <>
@@ -65,7 +107,9 @@ export default function App() {
       </NavBar>
       <Main>
         <Box isOpen={isOpen1} setIsOpen={setIsOpen1}>
-          <MovieList movies={movies}></MovieList>
+          {isLoading && <Loader />}
+          {!isLoading && !error && <MovieList movies={movies}></MovieList>}
+          {error && <ErrorMessage message={error}></ErrorMessage>}
         </Box>
         <Box isOpen={isOpen2} setIsOpen={setIsOpen2}>
           <WatchedSummary watched={watched}></WatchedSummary>
@@ -80,8 +124,21 @@ export default function App() {
   );
 }
 
+function Loader() {
+  return <p className="loader">Loading...</p>;
+}
+
 function NavBar({ children }) {
   return <nav className="nav-bar">{children}</nav>;
+}
+
+function ErrorMessage({ message }) {
+  return (
+    <p className="error">
+      <span>⛔</span>
+      {message}
+    </p>
+  );
 }
 
 function Logo() {
